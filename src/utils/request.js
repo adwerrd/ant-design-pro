@@ -1,3 +1,4 @@
+import axios from 'axios'
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
 
@@ -22,35 +23,25 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
-  const defaultOptions = {
-    credentials: 'include',
-  };
-  const newOptions = { ...defaultOptions, ...options };
-  if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
-    newOptions.headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json; charset=utf-8',
-      ...newOptions.headers,
+  return axios[(options && options.method.toLowerCase()) || 'get' ]('http://172.18.28.53:16666' + url, options && options.body)
+  .then(checkStatus)
+  .then(function(response) {
+    return { status: 'ok' , ...response.data }
+  })
+  .catch((error) => {
+    console.log('error', error)
+    if (error.code) {
+      notification.error({
+        message: error.name,
+        description: error.message,
+      })
     };
-    newOptions.body = JSON.stringify(newOptions.body);
-  }
-
-  return fetch(url, newOptions)
-    .then(checkStatus)
-    .then(response => response.json())
-    .catch((error) => {
-      if (error.code) {
-        notification.error({
-          message: error.name,
-          description: error.message,
-        });
-      }
-      if ('stack' in error && 'message' in error) {
-        notification.error({
-          message: `请求错误: ${url}`,
-          description: error.message,
-        });
-      }
-      return error;
-    });
+    if ('stack' in error && 'message' in error) {
+      notification.error({
+        message: `请求错误: ${url}`,
+        description: error.message,
+      })
+    }
+    return error
+  })
 }

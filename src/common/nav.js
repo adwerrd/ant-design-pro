@@ -19,6 +19,7 @@ export const getNavData = app => [
         name: 'Dashboard',
         icon: 'dashboard',
         path: 'dashboard',
+        menu: true,
         children: [
           {
             name: '分析页',
@@ -41,6 +42,7 @@ export const getNavData = app => [
         name: '表单页',
         path: 'form',
         icon: 'form',
+        menu: true,
         children: [
           {
             name: '基础表单',
@@ -73,6 +75,7 @@ export const getNavData = app => [
         name: '列表页',
         path: 'list',
         icon: 'table',
+        menu: true,
         children: [
           {
             name: '查询表格',
@@ -110,6 +113,7 @@ export const getNavData = app => [
         name: '详情页',
         path: 'profile',
         icon: 'profile',
+        menu: false,
         children: [
           {
             name: '基础详情页',
@@ -127,6 +131,7 @@ export const getNavData = app => [
         name: '结果',
         path: 'result',
         icon: 'check-circle-o',
+        menu: false,
         children: [
           {
             name: '成功',
@@ -144,6 +149,7 @@ export const getNavData = app => [
         name: '异常',
         path: 'exception',
         icon: 'warning',
+        menu: false,
         children: [
           {
             name: '403',
@@ -173,6 +179,7 @@ export const getNavData = app => [
         name: '帐户',
         icon: 'user',
         path: 'user',
+        menu: false,
         children: [
           {
             name: '登录',
@@ -201,6 +208,7 @@ export const getNavData = app => [
       path: 'http://pro.ant.design/docs/getting-started',
       target: '_blank',
       icon: 'book',
+      menu: false,
     },
   },
 ];

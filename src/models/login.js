@@ -1,3 +1,4 @@
+import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router';
 import { fakeAccountLogin, fakeMobileLogin } from '../services/api';
 
@@ -24,21 +25,6 @@ export default {
         payload: false,
       });
     },
-    *mobileSubmit(_, { call, put }) {
-      yield put({
-        type: 'changeSubmitting',
-        payload: true,
-      });
-      const response = yield call(fakeMobileLogin);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      yield put({
-        type: 'changeSubmitting',
-        payload: false,
-      });
-    },
     *logout(_, { put }) {
       yield put({
         type: 'changeLoginStatus',
@@ -47,6 +33,12 @@ export default {
         },
       });
       yield put(routerRedux.push('/user/login'));
+    },
+    *checkLoginStatus(_, { put, select }) {
+      const loginStatus = yield select(state => state.login.status)
+      if (loginStatus !== 'ok') {
+        yield put(routerRedux.push('/user/login'))
+      }
     },
   },
 
@@ -63,6 +55,19 @@ export default {
         ...state,
         submitting: payload,
       };
+    },
+  },
+  subscriptions: {
+    setup({ dispatch, history }) {
+      // Subscribe history(url) change, trigger `load` action if pathname is `/`
+      return history.listen(({ pathname }) => {
+        const match = pathToRegexp('/user/:router').exec(pathname)
+        if (!match) {
+          dispatch({
+            type: 'checkLoginStatus',
+          })
+        }
+      })
     },
   },
 };

@@ -68,9 +68,9 @@ const proxy = {
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
-  'POST /api/login/account': (req, res) => {
-    const { password, userName } = req.body;
-    res.send({ status: password === '888888' && userName === 'admin' ? 'ok' : 'error', type: 'account' });
+  'POST /api/auth/login': (req, res) => {
+    const { password, email } = req.body;
+    res.send({ status: password === '123456' && email === 'admin@baishancloud.com' ? 'ok' : 'error', type: 'account' });
   },
   'POST /api/login/mobile': (req, res) => {
     res.send({ status: 'ok', type: 'mobile' });
